@@ -1,7 +1,8 @@
 #include <iostream>
-#include "Request.hpp"
+#include "RequestExtender.hpp"
 int main(int argc, char const *argv[])
 {
+    RequestExtender R;
     
     return 0;
 }
