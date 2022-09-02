@@ -15,10 +15,10 @@ void requestExtenderTestDriver() {
     std::cout << "Beginning tests on mean()" << std::endl;
     for(unsigned int i = 0; i < testResults.size(); i++){
         if(!testResults[i]) {
-            std::cout << "testMean() failed test case: " << i << std::endl;
+            std::cout << "Failed test case: " << i << std::endl;
         }
         else {
-            std::cout << "testMean() passed test case: " << i << std::endl;
+            std::cout << "Passed test case: " << i << std::endl;
         }
     }
 
@@ -26,10 +26,20 @@ void requestExtenderTestDriver() {
     testResults = R.testSD();
     for(unsigned int i = 0; i < testResults.size(); i++){
         if(!testResults[i]) {
-            std::cout << "testSD() failed test case: " << i << std::endl;
+            std::cout << "Failed test case: " << i << std::endl;
         }
         else {
-            std::cout << "testSD() passed test case: " << i << std::endl;
+            std::cout << "Passed test case: " << i << std::endl;
+        }
+    }
+    std::cout << "Beginning tests on canBuildHistogram()" << std::endl;
+    testResults = R.testCanBuildHistogram();
+    for(unsigned int i = 0; i < testResults.size(); i++){
+        if(!testResults[i]) {
+            std::cout << "Failed test case: " << i << std::endl;
+        }
+        else {
+            std::cout << "Passed test case: " << i << std::endl;
         }
     }
 

@@ -58,15 +58,23 @@ double RequestExtender::sd(const std::string& uri) const {
     }
     return std::sqrt(sd / totalMatches);
 }
-;
-
-
 
 
 void RequestExtender::buildHistogram(const std::string& uri) { 
+
 }
 bool RequestExtender::canBuildHistogram(const std::string& uri) const {
-
+    auto range = m_responseTimes.equal_range(uri);
+    int totalMatches = std::distance(range.first, range.second);
+    if(totalMatches < 2) {
+        return false;
+    }
+    for(auto it = range.first; it != range.second; it++) {
+        if(it->second != range.first->second){
+            return true;
+        }
+    }
+    return false;
 }
 
 std::vector<double> RequestExtender::fetchHistogram() const {

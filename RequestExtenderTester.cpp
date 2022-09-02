@@ -156,12 +156,56 @@ std::vector<bool> RequestExtenderTester::testSD() {
 
     return testCaseResults;
 }
+
 std::vector<bool> RequestExtenderTester::testBuildHistogram() {
+    RequestExtender r(3);
     std::vector<bool> testCaseResults;
     return testCaseResults;
 }
 std::vector<bool> RequestExtenderTester::testCanBuildHistogram() {
+    RequestExtender r(3);
     std::vector<bool> testCaseResults;
+
+    // Test case: 0
+    // Testing result on unprocessed data
+    bool result = r.canBuildHistogram("Foo");
+    testCaseResults.push_back(!result);
+
+    // Test case: 1
+    // Testing result on data with one processing times 
+    r.m_responseTimes.insert(std::make_pair("foobar", 10));
+    result = r.canBuildHistogram("foobar");
+    testCaseResults.push_back(!result);
+
+    // Test case: 2
+    // Testing result on data with multiple identical processing times
+    r.m_responseTimes.insert(std::make_pair("foobar", 10));
+    result = r.canBuildHistogram("foobar");
+    testCaseResults.push_back(!result);
+
+    // Test case: 3
+    // Testing result on data with multiple identical processing times,
+    // and two unique processing times
+
+    r.m_responseTimes.insert(std::make_pair("foobar", 3));
+    result = r.canBuildHistogram("foobar");
+    testCaseResults.push_back(result);
+    
+    // Test case: 4
+    // Testing result on data with two unique processing times and no
+    // identical times 
+
+    r.m_responseTimes.insert(std::make_pair("bar", 3));
+    r.m_responseTimes.insert(std::make_pair("bar", 0));
+    result = r.canBuildHistogram("bar");
+    testCaseResults.push_back(result);
+
+    // Testing result on data with one unique processing value, after
+    // multiple unique values for other URIs have been processed 
+
+    result = r.canBuildHistogram("foo");
+    testCaseResults.push_back(!result);
+
     return testCaseResults;
 }
 std::vector<bool> RequestExtenderTester::testFetchHistogram() {
