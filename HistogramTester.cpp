@@ -1,5 +1,10 @@
 #include "HistogramTester.hpp"
 
+/*
+HistogramTester::HistogramTester(const std::vector<double>& dataSet, unsigned int binCount) {
+    Histogram(dataSet, binCount);
+}
+*/
 bool HistogramTester::testNormalize() {return false;}
 bool HistogramTester::testNormalizeDataset() {return false;}
 bool HistogramTester::testFillBins() {return false;}

@@ -22,12 +22,24 @@ void RequestExtender::finish() {
 
     auto endTime = std::chrono::steady_clock::now();
     auto timePassed = (endTime - this->m_startTime) / 1E6;
-    int timePassedInt = timePassed.count();
-    m_responseTimes.insert({m_uriKey, timePassedInt});
+    double timePassedDouble = timePassed.count();
+    m_responseTimes.insert(std::make_pair(m_uriKey, timePassedDouble));
 }
 
 double RequestExtender::mean(const std::string& uri) const {
 
+    auto range = m_responseTimes.equal_range(uri);
+    int totalMatches = std::distance(range.first, range.second);
+    
+    if(totalMatches < 1) {
+        throw std::invalid_argument("URI has not been previously processed");
+    }
+
+    double total = 0;
+    for(auto it = range.first; it != range.second; it++){
+        total += it->second;
+    }
+    return total / totalMatches;
 }
 
 double RequestExtender::sd(const std::string& uri) const {
