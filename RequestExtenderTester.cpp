@@ -75,10 +75,85 @@ std::vector<bool> RequestExtenderTester::testMean() {
         testCaseResults.push_back(false);
     }
 
+
     return testCaseResults;
 }
 std::vector<bool> RequestExtenderTester::testSD() {
     std::vector<bool> testCaseResults;
+    RequestExtender r(3);
+    // Test case: 0
+    // Test proper exception handling for unprocessed data
+    try {
+        r.sd("foo");
+        testCaseResults.push_back(false);
+    } catch(std::invalid_argument const&) {
+        testCaseResults.push_back(true);
+    };
+
+    // Test case: 1
+    // Test exception is not thrown for processed data
+    r.process("bar");
+    try {
+        r.sd("bar");
+        testCaseResults.push_back(true);
+    } catch(std::invalid_argument const&) {
+        testCaseResults.push_back(false);
+    };
+
+    // Test case: 2
+    // Test exception is not thrown for unprocessed data after other data is processed
+    try {
+        r.sd("foo");
+        testCaseResults.push_back(false);
+    } catch(std::invalid_argument const&) {
+        testCaseResults.push_back(true);
+    };
+    
+    // Test case: 3
+    // Test sd calculation with single value
+    r.m_responseTimes.insert(std::make_pair("foobar", 10));
+    try {
+        double meanTime = r.sd("foobar");
+        if(meanTime == 0){
+            testCaseResults.push_back(true);
+        } else {
+            testCaseResults.push_back(false);
+        }
+    } catch(std::invalid_argument const&) {
+        testCaseResults.push_back(false);
+    }
+    // Test case: 4
+    // Test sd calculation with two values
+    r.m_responseTimes.insert(std::make_pair("foobar", 0));
+    try {
+        double meanTime = r.sd("foobar");
+        if(meanTime == 5){
+            testCaseResults.push_back(true);
+        } else {
+            testCaseResults.push_back(false);
+        }
+    } catch(std::invalid_argument const&) {
+        testCaseResults.push_back(false);
+    }
+    // Test case: 5
+    // Test sd calculation with more values
+     r.m_responseTimes.insert(std::make_pair("foobar", 0));
+     r.m_responseTimes.insert(std::make_pair("foobar", 0));
+     r.m_responseTimes.insert(std::make_pair("foobar", 0));
+
+    try {
+        double meanTime = r.sd("foobar");
+        if(meanTime == 4){
+            testCaseResults.push_back(true);
+        } else {
+            testCaseResults.push_back(false);
+        }
+    } catch(std::invalid_argument const&) {
+        testCaseResults.push_back(false);
+    }
+
+
+
     return testCaseResults;
 }
 std::vector<bool> RequestExtenderTester::testBuildHistogram() {

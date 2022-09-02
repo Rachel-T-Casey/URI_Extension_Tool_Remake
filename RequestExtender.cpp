@@ -1,4 +1,5 @@
 #include "RequestExtender.hpp"
+#include <cmath>
 
 
 RequestExtender::RequestExtender(unsigned int binCount)
@@ -43,7 +44,24 @@ double RequestExtender::mean(const std::string& uri) const {
 }
 
 double RequestExtender::sd(const std::string& uri) const {
+
+    auto range = m_responseTimes.equal_range(uri);
+    int totalMatches = std::distance(range.first, range.second);
+
+    if(totalMatches < 1) {
+        throw std::invalid_argument("URI has not been previously processed");
+    }
+    double meanValue = this->mean(uri);
+    double sd = 0.0;
+    for(auto it = range.first; it != range.second; it++) {
+        sd += std::pow(it->second - meanValue, 2);
+    }
+    return std::sqrt(sd / totalMatches);
 }
+;
+
+
+
 
 void RequestExtender::buildHistogram(const std::string& uri) { 
 }
