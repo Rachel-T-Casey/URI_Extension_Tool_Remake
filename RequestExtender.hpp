@@ -221,7 +221,7 @@ class RequestExtender : public Request
         * Records the current time, and copies the passed uri to prepare the finish()
         * function.
         * 
-        * @param [in] uri A URI which is being processed by the process() function
+        * @param [in] uri A non-empty URI being processed by the process() function
         */
         void start(const std::string& uri);
         /** 
@@ -229,11 +229,15 @@ class RequestExtender : public Request
         * from the start() function. This value is then stored in a multimap with 
         * the uri passed to the start() function as the key. 
         *
-        * @throws std::logic_error if no startTime, or no uri name is recorded from
-        * the start() function
+        * @throws std::logic_error if m_startTime is not initalized from the start()
+        * function being previously called
+        * 
+        * @throws std::logic_error if m_uriKey is not initalized or is equal to an empty
+        * string from the start() function being previously called.
         */
         void finish();
         std::chrono::time_point<std::chrono::steady_clock> m_startTime;
+        std::string m_uriKey;
         std::multimap<std::string, double> m_responseTimes;
         unsigned int m_binCount;
         Histogram* m_histogramPtr;
