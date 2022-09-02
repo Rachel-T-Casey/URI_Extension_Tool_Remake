@@ -8,7 +8,7 @@ CPPFLAGS = -Wall -g $(shell root-config --cflags)
 LDFLAGS = -g $(shell root-config --ldflags)
 LDLIBS = $(shell root-config --libs)
 
-SourceFiles = Main.cpp Request.cpp RequestExtender.cpp
+SourceFiles = Main.cpp Request.cpp RequestExtender.cpp Histogram.cpp RequestExtenderTester.cpp HistogramTester.cpp
 Objects = $(subst .cpp,.o,$(SourceFiles))
 
 all: Output

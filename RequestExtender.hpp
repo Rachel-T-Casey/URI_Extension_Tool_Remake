@@ -1,5 +1,5 @@
-#ifndef REQUEST_EXTENSION_HPP
-#define REQUEST_EXTENSION_HPP
+#ifndef REQUEST_EXTENDER_HPP
+#define REQUEST_EXTENDER_HPP
 
 #include "Request.hpp"
 
@@ -47,7 +47,16 @@
 class RequestExtender : public Request
 {
     public:
-
+        /**
+         * 
+         * 
+         * @param The number of bins that should be used when creating histograms. The number
+         * of bins must be at least two
+         * 
+         * @throws std::invalid_argument if the number of bins is less than two
+         * 
+        */ 
+        RequestExtender(unsigned int binCount);
         /** 
          * Given a uri which has been processed previously, returns the mean response
          * time for the respective uri
@@ -78,7 +87,7 @@ class RequestExtender : public Request
          * @throws std::invalid_argument if there are not at least two unique response times
          * for the specified uri
         */
-        //void buildHistogram(std::string& uri) const;
+        void buildHistogram(const std::string& uri);
 
         /**
          * Returns whether a specified uri is a valid uri for histogram creation.
@@ -88,7 +97,7 @@ class RequestExtender : public Request
          * uri for histogram creation. Valid URIs must have had at least two process time 
          * measurements from the process() function.
         */ 
-        bool canBuildHistogram(std::string& uri) const;
+        bool canBuildHistogram(const std::string& uri) const;
         /**
          * Returns the bins of the last histogram constructed byt he buildHistogram()
          * function. This function must only be called after a histogram is successfully 
@@ -205,6 +214,8 @@ class RequestExtender : public Request
              */
             void fillBins(std::vector<double>& normalizedData);
             std::vector<double> m_bins;
+            friend class HistogramTester;
+
     };
         /**
         * Records the current time, and copies the passed uri to prepare the finish()
@@ -224,7 +235,10 @@ class RequestExtender : public Request
         void finish();
         std::chrono::time_point<std::chrono::steady_clock> m_startTime;
         std::multimap<std::string, double> m_responseTimes;
+        unsigned int m_binCount;
         Histogram* m_histogramPtr;
-       
+        friend class RequestExtenderTester;
+        friend class HistogramTester;
+
 };
 #endif

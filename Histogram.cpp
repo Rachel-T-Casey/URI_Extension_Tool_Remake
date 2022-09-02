@@ -1,5 +1,5 @@
 #include "RequestExtender.hpp"
 
-Histogram::Histogram() {
+RequestExtender::Histogram::Histogram(const std::vector<double>& dataSet, unsigned int binCount) {
 
 }
