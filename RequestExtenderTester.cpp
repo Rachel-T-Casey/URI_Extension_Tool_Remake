@@ -200,6 +200,7 @@ std::vector<bool> RequestExtenderTester::testCanBuildHistogram() {
     result = r.canBuildHistogram("bar");
     testCaseResults.push_back(result);
 
+    // Test case: 5
     // Testing result on data with one unique processing value, after
     // multiple unique values for other URIs have been processed 
 

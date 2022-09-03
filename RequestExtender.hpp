@@ -141,8 +141,9 @@ class RequestExtender : public Request
         *   bins() Will return a copy of the vector that the data is sorted in.
         *   binSize() Will return the size of the range of data each bin occupies.
         */    
-    class Histogram {         
+    class Histogram {        
         public:
+
             /**
             * Takes in a dataset, normalizes the dataset, and stores the normalized dataset
             * in a vector amongst a number of indices equal to passed binCount in the form
@@ -151,11 +152,11 @@ class RequestExtender : public Request
             * @param [in] dataSet Data from a dataset with at least two unique values.
             * @param [in] binCount The number of bins the outputted histogram should contain.
             * binCount must be at least two.
-            * @throws std::invalid_arguement if the number of unique values in the dataset is
+            * @throws std::invalid_argument if the number of unique values in the dataset is
             * less than two
             * @throws std::invalid_argument if the number of bins is less than two
             */
-            Histogram(const std::vector<double>& dataSet, unsigned int binCount);
+            explicit Histogram(const std::vector<double>& dataSet, unsigned int binCount);
             /**
             * Returns a copy of the bins vector
             * @return A copy of the vector of bins for the histogram. This vector will 
@@ -174,6 +175,13 @@ class RequestExtender : public Request
             double binSize() const;
         private:
             /**
+             * Empty constructor is only used when performing unit tests on Histogram()
+             * functions within the HistogramTester class. This constructor should be 
+             * removed before merging with main branch, and should only exist in the dev
+             * branch. 
+             */ 
+            Histogram() {};
+            /**
             * Given data from a dataset, as well as the minimum and maximum datapoints
             * from the same dataset, returns a normalized value for the passed data 
             * between 0 and 1. The dataset must contain at least two unique values.
@@ -182,8 +190,8 @@ class RequestExtender : public Request
             * @param [in] min The minimum value in the respective dataset
             * @param [in] max The maximum value in the respective dataset
             * @returns The normalized value for data between 0 and 1
-            * @throws std::invalid_argument if min is >= than max
-            * @throws std::invalid_argument if max is <= min
+            * @throws std::invalid argument if min == max
+            * @throws std::invalid_argument if min is > than max
             * @throws std::invalid_argument if data < min
             * @throws std::invalid_argument if data > max
             */
@@ -217,6 +225,7 @@ class RequestExtender : public Request
             friend class HistogramTester;
 
     };
+
         /**
         * Records the current time, and copies the passed uri to prepare the finish()
         * function.

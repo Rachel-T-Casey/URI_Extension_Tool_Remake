@@ -2,6 +2,8 @@
 #define HISTOGRAM_TESTER_HPP
 #include "RequestExtender.hpp"
 #include <vector>
+#include <stdexcept>  
+
 /**
 * Unit test class for functions in the Histogram class
 * 
@@ -12,17 +14,16 @@
 * @return Returns true if the respective function passed all test cases, or false if the 
 * function failed at least one test case
 */ 
-class HistogramTester : public RequestExtender::Histogram {
+class HistogramTester {
     public:
-        HistogramTester();
-        HistogramTester(const std::vector<double>& dataSet, unsigned int binCount);
-        bool testNormalize();
-        bool testNormalizeDataset();
-        bool testFillBins();
-        bool testBins();
-        bool testBinSize();
-        bool testHistogram();
-        bool testAll();
+        std::vector<bool> testNormalize();
+        std::vector<bool> testNormalizeDataset();
+        std::vector<bool> testFillBins();
+        std::vector<bool> testBins();
+        std::vector<bool> testBinSize();
+        std::vector<bool> testHistogram();
+        std::vector<bool> testAll();
     };
+
 
 #endif
