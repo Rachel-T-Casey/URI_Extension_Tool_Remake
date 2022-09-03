@@ -1,6 +1,9 @@
 #ifndef REQUEST_EXTENDER_TESTER_HPP
 #define REQUEST_EXTENDER_TESTER_HPP
 #include "RequestExtender.hpp"
+#include "Tester.hpp"
+#include <functional>
+
 #include <vector>
 
 /**
@@ -14,7 +17,7 @@
 * function failed at least one test case
 */ 
 
-class RequestExtenderTester {
+class RequestExtenderTester : public Tester{
     public:
         std::vector<bool>  testMean();
         std::vector<bool>  testSD();

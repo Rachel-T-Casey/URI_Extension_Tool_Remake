@@ -2,10 +2,23 @@
 #include <vector>
 #include "RequestExtenderTester.hpp"
 #include "HistogramTester.hpp"
+#include "Tester.hpp"
+#include <typeinfo>
+#include <algorithm>
 void requestExtenderTestDriver();
 void histogramTestDriver();
 void printTestCases(std::vector<bool> testResults);
-int main(int argc, char const *argv[]){
+
+
+int main(int argc, char const *argv[]) {
+    /*std::function<bool (int, bool)> f = equals;
+    Tester t;
+    if(test(f, false, true, 3, false)){
+        std::cout << "Success" << std::endl;
+    } else
+    std::cout << "Failure" << std::endl;
+
+    */
     requestExtenderTestDriver();
     histogramTestDriver();
     return 0;
@@ -53,6 +66,7 @@ void histogramTestDriver() {
     H.testHistogram();
     */
 }
+
 void printTestCases(std::vector<bool> testResults) {
     for(unsigned int i = 0; i < testResults.size(); i++) {
         if(testResults[i]) {

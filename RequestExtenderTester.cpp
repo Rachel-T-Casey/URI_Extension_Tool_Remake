@@ -1,113 +1,58 @@
 #include "RequestExtenderTester.hpp"
-
 #include <stdexcept>  
 
 std::vector<bool> RequestExtenderTester::testMean() {
-    RequestExtender r(3);
-    std::vector<bool> testCaseResults;
+    this->clearTestCases();
+    auto RequestExtenderPtr = std::make_shared<RequestExtender>(3);
+    std::function<double (std::string)> funct = 
+        std::bind(&RequestExtender::mean, RequestExtenderPtr, std::placeholders::_1);
+ 
+    //Test case 0: Throwing exception for unparsed data
+    this->testCase(funct, true, 0,"foo");
+    
+    //Test case 1: No exception thrown for parsed data
+    RequestExtenderPtr->m_responseTimes.insert(std::make_pair("bar", 0));
+    this->testCase(funct, false, 0,"bar");
+   
+    // Test case 2: Exceptions thrown for unprocessed data after other
+    // data has been processed
+    this->testCase(funct, true, 0, "foo");
+   
+    // Test case 3: Test mean calculation for single value
+    RequestExtenderPtr->m_responseTimes.insert(std::make_pair("foobar", 0));
+    this->testCase(funct, false, 0, "foobar");
+   
+    // Test case 4: Test mean calculation with multiple values
+    RequestExtenderPtr->m_responseTimes.insert(std::make_pair("foobar", 1));
+    this->testCase(funct, false, 0.5, "foobar");
+    
+    // Test case 5: Test mean calculation with more values
+    RequestExtenderPtr->m_responseTimes.insert(std::make_pair("foobar", 2.5));
+    RequestExtenderPtr->m_responseTimes.insert(std::make_pair("foobar", 1));
+    RequestExtenderPtr->m_responseTimes.insert(std::make_pair("foobar", 1));
+    this->testCase(funct, false, 1.1, "foobar");
 
-    // Test case: 0
-    // Test proper exception handling for unprocessed data
-    try {
-        r.mean("foo");
-        testCaseResults.push_back(false);
-    } catch(std::invalid_argument const&) {
-        testCaseResults.push_back(true);
-    };
-
-    // Test case: 1
-    // Test exception is not thrown for processed data
-    r.process("bar");
-    try {
-        r.mean("bar");
-        testCaseResults.push_back(true);
-    } catch(std::invalid_argument const&) {
-        testCaseResults.push_back(false);
-    };
-
-    // Test case: 2
-    // Test exception is not thrown for unprocessed data after other data is processed
-    try {
-        r.mean("foo");
-        testCaseResults.push_back(false);
-    } catch(std::invalid_argument const&) {
-        testCaseResults.push_back(true);
-    };
-    // Test case: 3
-    // Test mean calculation with single value
-    r.m_responseTimes.insert(std::make_pair("foobar", 0));
-    try {
-        double meanTime = r.mean("foobar");
-        if(meanTime == 0){
-            testCaseResults.push_back(true);
-        } else {
-            testCaseResults.push_back(false);
-        }
-    } catch(std::invalid_argument const&) {
-        testCaseResults.push_back(false);
-    }
-    // Test case: 4
-    // Test mean calculation with multiple values
-    r.m_responseTimes.insert(std::make_pair("foobar", 1));
-    try {
-        double meanTime = r.mean("foobar");
-        if(meanTime == 0.5){
-            testCaseResults.push_back(true);
-        } else {
-            testCaseResults.push_back(false);
-        }
-    } catch(std::invalid_argument const&) {
-        testCaseResults.push_back(false);
-    }
-    // Test case: 5
-    // Test mean calculation with more values
-    r.m_responseTimes.insert(std::make_pair("foobar", 2.5));
-    r.m_responseTimes.insert(std::make_pair("foobar", 1));
-    r.m_responseTimes.insert(std::make_pair("foobar", 1));
-    try {
-        double meanTime = r.mean("foobar");
-        if(meanTime == 1.1){
-            testCaseResults.push_back(true);
-        } else {
-            testCaseResults.push_back(false);
-        }
-    } catch(std::invalid_argument const&) {
-        testCaseResults.push_back(false);
-    }
-
-
-    return testCaseResults;
+    return this->getTestResults();
 }
 std::vector<bool> RequestExtenderTester::testSD() {
-    std::vector<bool> testCaseResults;
-    RequestExtender r(3);
-    // Test case: 0
-    // Test proper exception handling for unprocessed data
-    try {
-        r.sd("foo");
-        testCaseResults.push_back(false);
-    } catch(std::invalid_argument const&) {
-        testCaseResults.push_back(true);
-    };
+    this->clearTestCases();
+    auto requestExtenderPtr = std::make_shared<RequestExtender>(3);
+    std::function<double (std::string)> funct = 
+        std::bind(&RequestExtender::sd, requestExtenderPtr, std::placeholders::_1);
 
-    // Test case: 1
-    // Test exception is not thrown for processed data
-    r.process("bar");
-    try {
-        r.sd("bar");
-        testCaseResults.push_back(true);
-    } catch(std::invalid_argument const&) {
-        testCaseResults.push_back(false);
-    };
+    // Test case: 0 Proper exception handling for unprocessed data
+    this->testCase(funct, true, 0, "foo");
+    // Test case 1: No exception thrown for processed data
+    requestExtenderPtr->m_responseTimes.insert(std::make_pair("bar", 0));
+    this->testCase(funct, false, 0, "bar");
+    // Test case 2: Proper exception handlng after other data has been processed
+    this->testCase(funct, true, 0, "foo");
+    // Test case 3: SD calculation with single value
+    requestExtenderPtr->m_responseTimes.insert(std::make_pair("foobar", 10));
+    this->testCase(funct, false, 0, "foobar");
+    return this->getTestResults();
+    /*
 
-    // Test case: 2
-    // Test exception is not thrown for unprocessed data after other data is processed
-    try {
-        r.sd("foo");
-        testCaseResults.push_back(false);
-    } catch(std::invalid_argument const&) {
-        testCaseResults.push_back(true);
-    };
     
     // Test case: 3
     // Test sd calculation with single value
@@ -153,8 +98,8 @@ std::vector<bool> RequestExtenderTester::testSD() {
     }
 
 
+    */
 
-    return testCaseResults;
 }
 
 std::vector<bool> RequestExtenderTester::testBuildHistogram() {

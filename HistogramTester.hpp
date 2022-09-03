@@ -1,6 +1,8 @@
 #ifndef HISTOGRAM_TESTER_HPP
 #define HISTOGRAM_TESTER_HPP
 #include "RequestExtender.hpp"
+#include "Tester.hpp"
+
 #include <vector>
 #include <stdexcept>  
 
@@ -14,7 +16,7 @@
 * @return Returns true if the respective function passed all test cases, or false if the 
 * function failed at least one test case
 */ 
-class HistogramTester {
+class HistogramTester : public Tester {
     public:
         std::vector<bool> testNormalize();
         std::vector<bool> testNormalizeDataset();
@@ -23,6 +25,8 @@ class HistogramTester {
         std::vector<bool> testBinSize();
         std::vector<bool> testHistogram();
         std::vector<bool> testAll();
+    private:
+
     };
 
 

@@ -79,6 +79,8 @@ std::vector<bool> HistogramTester::testNormalize() {
     // would result in unexpected values
     return testResults;
 }
+
+
 std::vector<bool> HistogramTester::testNormalizeDataset() {
     std::vector<bool> testResults;
     return testResults;
