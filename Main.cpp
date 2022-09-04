@@ -58,6 +58,10 @@ void histogramTestDriver() {
     std::cout << "Starting test on normalizeDataset()" << std::endl;
     testResults = H.testNormalizeDataset();
     printTestCases(testResults);
+
+    std::cout << "Starting test on fillBins()" << std::endl;
+    testResults = H.testFillBins();
+    printTestCases(testResults);
     /*
     H.testNormalizeDataset();
     H.testFillBins();

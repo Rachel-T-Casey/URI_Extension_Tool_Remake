@@ -204,6 +204,7 @@ class RequestExtender : public Request
             * 
             * @see normalize(double,double,double) const
             * @param [in] data A dataset with a minimum of two unique values.
+            * @throws invalid_argument if dataset has less than two unique values
             * @return A vector containing normalized values between 0 and 1 generated 
             * from the respective dataset.
             */
@@ -217,10 +218,11 @@ class RequestExtender : public Request
             * 
             * @param [in] A sorted normalized dataset containing values between 0 and 1 
             * with the minimum value being 0 and the maximum value being 1.
+            * @returns a copy of the filled bins
             * @throws std::invalid_argument if the minimum value in the dataset is < 0
             * @throws std::invalid_argument if the maximum value in the dataset is > 1
              */
-            void fillBins(std::vector<double>& normalizedData);
+            std::vector<double> fillBins(const std::vector<double>& normalizedData);
             std::vector<double> m_bins;
             friend class HistogramTester;
 

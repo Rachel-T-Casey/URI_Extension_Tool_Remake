@@ -1,5 +1,5 @@
 #include "RequestExtender.hpp"
-
+#include <algorithm>
 RequestExtender::Histogram::Histogram(const std::vector<double>& dataSet, unsigned int binCount) {
     if(binCount < 2) {
         throw std::invalid_argument("Histogram requires at least two bins");
@@ -8,15 +8,16 @@ RequestExtender::Histogram::Histogram(const std::vector<double>& dataSet, unsign
         throw std::invalid_argument("Passed dataset contains too few unique values");
     }
     std::vector<double> normalizedData = normalizeDataset(dataSet);
+    std::sort(normalizedData.begin(), normalizedData.end());
     fillBins(normalizedData);
 }
 
 std::vector<double> RequestExtender::Histogram::bins() const {
-
+    return this->m_bins;
 }
 
 double RequestExtender::Histogram::binSize() const {
-
+    return 1.0/static_cast<double>(m_bins.size());
 }
 
 double RequestExtender::Histogram::normalize(double data, double min, double max) const {
@@ -59,6 +60,19 @@ std::vector<double> RequestExtender::Histogram::normalizeDataset(const std::vect
     }
     return normalizedData;
 }
-void RequestExtender::Histogram::fillBins(std::vector<double>& normalizedData) {
-
+std::vector<double> RequestExtender::Histogram::fillBins(const std::vector<double>& normalizedData) {
+    if(normalizedData.size() < 2) {
+        throw std::invalid_argument("Normalized Datasets must have at last two unique values");
+    } 
+    if(normalizedData.front() != 0 || normalizedData.back() != 1) {
+        throw std::invalid_argument("Expects a sorted, normalizd dataset");
+    }
+    for(unsigned int i = 0; i < normalizedData.size(); i++) {
+        unsigned int targetBin = (normalizedData[i]) / this->binSize();
+        if(targetBin == m_bins.size())
+            targetBin--;
+        m_bins[targetBin]++;
+    }
+    return m_bins;
 }
+ 

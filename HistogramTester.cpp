@@ -66,16 +66,41 @@ std::vector<bool> HistogramTester::testNormalizeDataset() {
     return this->getTestResults();
 }
 std::vector<bool> HistogramTester::testFillBins() {
-    std::vector<bool> testResults;
-    return testResults;
-}
-std::vector<bool> HistogramTester::testBins() {
-    std::vector<bool> testResults;
-    return testResults;
-}
-std::vector<bool> HistogramTester::testBinSize() {
-    std::vector<bool> testResults;
-    return testResults;
+     this->clearTestCases();
+    //make_shared can't be used because Histogram() is a private class constructor
+    RequestExtender::Histogram* histogramPtr = new RequestExtender::Histogram;
+
+    std::function<std::vector<double> (const std::vector<double>&)> func = 
+    std::bind(&RequestExtender::Histogram::fillBins, histogramPtr, std::placeholders::_1);
+
+    histogramPtr->m_bins.push_back(0);
+    histogramPtr->m_bins.push_back(0);
+    std::vector<double> testInputs;
+    std::vector<double> expectedOutputs;
+
+    // Test case 0, exception if first value not zero
+    testInputs = { 0.1, 0.2, 0.5, 1 };
+    this->testCase(func, true, expectedOutputs, testInputs);
+    // Test case 1, exception if last value is not zero
+    testInputs = { 0, 0.2, 0.4, 0.5 };
+    this->testCase(func, true, expectedOutputs, testInputs);
+    // Test case 2, two bins with one element each
+    histogramPtr->m_bins = {0, 0};
+    testInputs = { 0, 1};
+    expectedOutputs = {1, 1};
+    this->testCase(func, false, expectedOutputs, testInputs);
+    // Test case 3, two bins with 5 elements in first, 2 elements in last
+    histogramPtr->m_bins = {0, 0};
+    testInputs = { 0, 0.1, 0.15, 0.2, 0.49, 0.5, 1};
+    expectedOutputs = { 5, 2 };
+    this->testCase(func, false, expectedOutputs, testInputs);
+    // test case 4, 5 bins with 1 element in first bin, 1 element in last bin
+    // and all others in bin 3
+    histogramPtr->m_bins = {0, 0, 0, 0, 0};
+    testInputs = {0, 0.2, 0.22, 0.25, 0.3, 0.7999, 1};
+    expectedOutputs = {1, 4, 0, 1, 1};
+    this->testCase(func, false, expectedOutputs, testInputs);
+    return this->getTestResults();
 }
 std::vector<bool> HistogramTester::testHistogram() {
     std::vector<bool> testResults;

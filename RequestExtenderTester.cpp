@@ -113,6 +113,8 @@ std::vector<bool> RequestExtenderTester::testCanBuildHistogram() {
     // multiple unique values for other URIs have been processed 
     this->testCase(funct, false, false, "foo");
     return this->getTestResults();
+
+
 }
 std::vector<bool> RequestExtenderTester::testFetchHistogram() {
     std::vector<bool> testCaseResults;
