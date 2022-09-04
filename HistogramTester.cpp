@@ -3,12 +3,11 @@
 std::vector<bool> HistogramTester::testNormalize() {
 
     this->clearTestCases();
-
-    RequestExtender r(3);
     //make_shared can't be used because Histogram() is a private class constructor
     RequestExtender::Histogram* histogramPtr = new RequestExtender::Histogram;
     std::function<double (double, double, double)> func = 
         std::bind(&RequestExtender::Histogram::normalize, histogramPtr, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+    
     this->testCase(func, true, 0, 0, 0, 0);
     //Test case 1:
     //Minimum greater than maximum
@@ -32,11 +31,39 @@ std::vector<bool> HistogramTester::testNormalize() {
     delete histogramPtr;
     return this->getTestResults();  
 }
-
-
 std::vector<bool> HistogramTester::testNormalizeDataset() {
-    std::vector<bool> testResults;
-    return testResults;
+    this->clearTestCases();
+    //make_shared can't be used because Histogram() is a private class constructor
+    RequestExtender::Histogram* histogramPtr = new RequestExtender::Histogram;
+     std::function<std::vector<double> (const std::vector<double>)> func = 
+        std::bind(&RequestExtender::Histogram::normalizeDataset, histogramPtr, std::placeholders::_1);
+
+    std::vector<double> testInputs;
+    std::vector<double> expectedOutputs;
+    // Test case 0: Verify exception on empty dataset
+    this->testCase(func, true, expectedOutputs, testInputs);
+    // Test case 1: Verify exception on dataset with one entry
+    testInputs = { 1 };
+    this->testCase(func, true, expectedOutputs, testInputs);
+    // Test case 2: Two inputs with first greater
+    testInputs = { 10, 0 };
+    expectedOutputs = { 1, 0 };
+    this->testCase(func, false, expectedOutputs, testInputs);
+    // Test case 3: Two inputs with first smaller
+    testInputs = { 1, 3 };
+    expectedOutputs = { 0, 1};
+    this->testCase(func, false, expectedOutputs, testInputs);
+    // Test case 4: Recurrent minimum, with one larger value
+    testInputs = { 1, 1, 10, 1, 1, 1, 1 };
+    expectedOutputs = {0, 0, 1, 0, 0, 0, 0};
+    this->testCase(func, false, expectedOutputs, testInputs);
+    // Test case 5: Recurrent minimum, recurrent maximum, single mid value
+    testInputs = { 1, 1, 1, 1, 3, 1, 3, 3, 2};
+    expectedOutputs = {0, 0, 0, 0, 1, 0, 1, 1, 0.5 };
+    this->testCase(func, false, expectedOutputs, testInputs);
+
+    delete histogramPtr;
+    return this->getTestResults();
 }
 std::vector<bool> HistogramTester::testFillBins() {
     std::vector<bool> testResults;
