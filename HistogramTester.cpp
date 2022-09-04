@@ -1,83 +1,36 @@
 #include "HistogramTester.hpp"
 #include "RequestExtender.hpp"
 std::vector<bool> HistogramTester::testNormalize() {
-    std::vector<bool> testResults;
-    //Test case: 0
-    //Test min == max
-    RequestExtender::Histogram h;
-    try { 
-        h.normalize(0, 0, 0);
-        testResults.push_back(false);
-    } catch(std::invalid_argument const&) {
-        testResults.push_back(true);
-    }
+
+    this->clearTestCases();
+
+    RequestExtender r(3);
+    //make_shared can't be used because Histogram() is a private class constructor
+    RequestExtender::Histogram* histogramPtr = new RequestExtender::Histogram;
+    std::function<double (double, double, double)> func = 
+        std::bind(&RequestExtender::Histogram::normalize, histogramPtr, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+    this->testCase(func, true, 0, 0, 0, 0);
     //Test case 1:
     //Minimum greater than maximum
-    try {
-        h.normalize(3, 10, 1);
-        testResults.push_back(false);
-    } catch(std::invalid_argument const&) {
-        testResults.push_back(true);
-    }
+    this->testCase(func, true, 0, 3, 10, 1);
     //Test case 2:
     //Data less than minimum
-    try {
-        h.normalize(2, 3, 10);
-        testResults.push_back(false);
-    }   catch(std::invalid_argument const&) {
-        testResults.push_back(true);
-    }
+    this->testCase(func, true, 0, 2, 3, 10);
     //Test case 3:
     //Data greater than maximum
-    try {
-        h.normalize(10, 3, 5); 
-        testResults.push_back(false);
-    }   catch(std::invalid_argument const&) {
-        testResults.push_back(true);
-    }
+    this->testCase(func, true, 0, 10, 3, 5);
     //Test case 4:
     //Positive data equal to max value
-    try {
-        double result = h.normalize(3, 2, 3);
-        if(result == 1){
-            testResults.push_back(true);
-        }
-        else {
-            testResults.push_back(false);
-        }
-    } catch(std::invalid_argument const&) {
-        testResults.push_back(false);
-    }
+    this->testCase(func, false, 1, 3, 2, 3);
     //Test case 5:
     //Postive data equal to min value
-    try {
-        double result = h.normalize(1, 1, 10);
-        if(result == 0) {
-            testResults.push_back(true);
-        }
-        else {
-            testResults.push_back(false);
-        }
-    } catch(std::invalid_argument const&) {
-        testResults.push_back(false);
-    }
+    this->testCase(func, false, 0, 1, 1, 10);
     //Test case 6:
     //Positve data between max and min
-    try {
-        double result = h.normalize(2, 1, 3);
-        if(result == 0.5) {
-            testResults.push_back(true);
-        }
-        else {
-            testResults.push_back(false);
-        }
-    } catch(std::invalid_argument const&) {
-        testResults.push_back(false);
-    }
-    // Possibly should expand test coverage to cover negative values. While negative
-    // values should never be encountered in the scope of this program, negative values
-    // would result in unexpected values
-    return testResults;
+    this->testCase(func, false, 0.5, 2, 1, 3);
+
+    delete histogramPtr;
+    return this->getTestResults();  
 }
 
 

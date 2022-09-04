@@ -2,7 +2,7 @@
 #define HISTOGRAM_TESTER_HPP
 #include "RequestExtender.hpp"
 #include "Tester.hpp"
-
+#include <functional>
 #include <vector>
 #include <stdexcept>  
 

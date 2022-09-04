@@ -1,6 +1,8 @@
 #ifndef TESTER_TPP
 #define TESTER_TPP
-   
+
+#include <functional>
+
 
 template <typename Fn, typename ExpectedReturn, typename ...Args>
 bool Tester::test(Fn &fn, bool expectedCrash, ExpectedReturn expectedReturn, Args... args) {
@@ -17,8 +19,7 @@ bool Tester::test(Fn &fn, bool expectedCrash, ExpectedReturn expectedReturn, Arg
 }
 
 template <typename Fn, typename Er, typename ...Args>
-void Tester::testCase(Fn &fn, bool ec, Er er, Args... args)
-{   
+void Tester::testCase(Fn &fn, bool ec, Er er, Args... args) {   
     bool result = this->test(fn, ec, er, std::forward<Args>(args)...);
     this->testResults.push_back(result);
 }
