@@ -103,8 +103,9 @@ std::vector<bool> HistogramTester::testFillBins() {
     return this->getTestResults();
 }
 std::vector<bool> HistogramTester::testHistogram() {
-    std::vector<bool> testResults;
-    return testResults;
+    this->clearTestCases();
+    
+    return this->getTestResults();
 }
 std::vector<bool> HistogramTester::testAll() {
     std::vector<bool> testResults;

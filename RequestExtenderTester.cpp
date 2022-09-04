@@ -116,18 +116,12 @@ std::vector<bool> RequestExtenderTester::testCanBuildHistogram() {
 
 
 }
-std::vector<bool> RequestExtenderTester::testFetchHistogram() {
-    std::vector<bool> testCaseResults;
-    return testCaseResults;
-}
+
 std::vector<bool> RequestExtenderTester::testGraphHistogram() {
     std::vector<bool> testCaseResults;
     return testCaseResults;
 }
-std::vector<bool> RequestExtenderTester::testRequestExtender() {
-    std::vector<bool> testCaseResults;
-    return testCaseResults;
-}
+
 std::vector<bool> RequestExtenderTester::testAll() {
     std::vector<bool> testCaseResults;
     return testCaseResults;

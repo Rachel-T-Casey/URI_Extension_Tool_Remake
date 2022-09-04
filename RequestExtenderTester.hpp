@@ -23,9 +23,7 @@ class RequestExtenderTester : public Tester{
         std::vector<bool>  testSD();
         std::vector<bool>  testBuildHistogram();
         std::vector<bool>  testCanBuildHistogram();
-        std::vector<bool>  testFetchHistogram();
         std::vector<bool>  testGraphHistogram();
-        std::vector<bool>  testRequestExtender();
         std::vector<bool>  testAll();
     };
 
