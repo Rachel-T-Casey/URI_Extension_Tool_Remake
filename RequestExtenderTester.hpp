@@ -21,10 +21,7 @@ class RequestExtenderTester : public Tester{
     public:
         std::vector<bool>  testMean();
         std::vector<bool>  testSD();
-        std::vector<bool>  testBuildHistogram();
         std::vector<bool>  testCanBuildHistogram();
-        std::vector<bool>  testGraphHistogram();
-        std::vector<bool>  testAll();
     };
 
 #endif

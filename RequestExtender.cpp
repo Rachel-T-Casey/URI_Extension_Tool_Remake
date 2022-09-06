@@ -60,8 +60,15 @@ double RequestExtender::sd(const std::string& uri) const {
 }
 
 
-void RequestExtender::buildHistogram(const std::string& uri) { 
-
+std::vector<double> RequestExtender::buildHistogram(const std::string& uri) { 
+    delete this->m_histogramPtr;
+    std::vector<double> data;
+    auto range = m_responseTimes.equal_range(uri);
+    for(auto it = range.first; it != range.second; it++) {
+        data.push_back(it->second);
+    }   
+   this->m_histogramPtr = new Histogram(data, m_binCount);
+   return this->fetchHistogram();
 }
 bool RequestExtender::canBuildHistogram(const std::string& uri) const {
     auto range = m_responseTimes.equal_range(uri);
@@ -78,11 +85,6 @@ bool RequestExtender::canBuildHistogram(const std::string& uri) const {
 }
 
 std::vector<double> RequestExtender::fetchHistogram() const {
-
-}
-
-
-std::string RequestExtender::graphHistogram() const {
-
+    return this->m_histogramPtr->bins();
 }
 

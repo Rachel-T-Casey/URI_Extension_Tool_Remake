@@ -21,9 +21,6 @@ class HistogramTester : public Tester {
         std::vector<bool> testNormalize();
         std::vector<bool> testNormalizeDataset();
         std::vector<bool> testFillBins();
-
-        std::vector<bool> testHistogram();
-        std::vector<bool> testAll();
     private:
 
     };

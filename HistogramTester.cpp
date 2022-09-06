@@ -102,12 +102,3 @@ std::vector<bool> HistogramTester::testFillBins() {
     this->testCase(func, false, expectedOutputs, testInputs);
     return this->getTestResults();
 }
-std::vector<bool> HistogramTester::testHistogram() {
-    this->clearTestCases();
-    
-    return this->getTestResults();
-}
-std::vector<bool> HistogramTester::testAll() {
-    std::vector<bool> testResults;
-    return testResults;
-}

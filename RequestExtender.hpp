@@ -82,12 +82,13 @@ class RequestExtender : public Request
          * graph() and getHistogram() functions
          *
          * @see Histogram
+         * @returns A copy of the bins of the histogram
          * @param [in] uri A URI which has been previously passed to process(uri), with
          * at least two unique logged response times
          * @throws std::invalid_argument if there are not at least two unique response times
          * for the specified uri
         */
-        void buildHistogram(const std::string& uri);
+        std::vector<double> buildHistogram(const std::string& uri);
 
         /**
          * Returns whether a specified uri is a valid uri for histogram creation.

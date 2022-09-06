@@ -67,11 +67,6 @@ std::vector<bool> RequestExtenderTester::testSD() {
     return this->getTestResults();
 }
 
-std::vector<bool> RequestExtenderTester::testBuildHistogram() {
-    RequestExtender r(3);
-    std::vector<bool> testCaseResults;
-    return testCaseResults;
-}
 std::vector<bool> RequestExtenderTester::testCanBuildHistogram() {
     std::vector<bool> testCaseResults;
     this->clearTestCases();
@@ -113,16 +108,5 @@ std::vector<bool> RequestExtenderTester::testCanBuildHistogram() {
     // multiple unique values for other URIs have been processed 
     this->testCase(funct, false, false, "foo");
     return this->getTestResults();
-
-
 }
 
-std::vector<bool> RequestExtenderTester::testGraphHistogram() {
-    std::vector<bool> testCaseResults;
-    return testCaseResults;
-}
-
-std::vector<bool> RequestExtenderTester::testAll() {
-    std::vector<bool> testCaseResults;
-    return testCaseResults;
-}

@@ -1,12 +1,9 @@
 #ifndef TESTER_TPP
 #define TESTER_TPP
-
 #include <functional>
-
 
 template <typename Fn, typename ExpectedReturn, typename ...Args>
 bool Tester::test(Fn &fn, bool expectedCrash, ExpectedReturn expectedReturn, Args... args) {
-    
     decltype(std::forward<Fn>(fn)(std::forward<Args>(args)...)) r;
     try {
         r = std::forward<Fn>(fn)(std::forward<Args>(args)...);
@@ -15,7 +12,7 @@ bool Tester::test(Fn &fn, bool expectedCrash, ExpectedReturn expectedReturn, Arg
         } else {
             return r == expectedReturn;
         }
-    } catch (std::exception& ex ){return expectedCrash;} 
+    } catch (std::exception& ex){return expectedCrash;} 
 }
 
 template <typename Fn, typename Er, typename ...Args>
